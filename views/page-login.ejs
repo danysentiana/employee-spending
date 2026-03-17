@@ -1,0 +1,128 @@
+<%- include ('page-header-layout.ejs') %>
+
+<style>
+    .swal2-container {
+        z-index: 10000 !important; 
+        overflow-y: hidden;
+    }
+
+    .swal2-popup {
+        border-radius: 10px; /* Keeps the alert box styled properly */
+    }
+
+    .login-logo {
+        max-height: 130px;
+        width: auto;
+    }
+
+    #login_button:hover {
+        background-color: #295F99 !important;
+        
+    }
+
+    /* Fix for full viewport height without scrolling */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .container-fluid.h-100 {
+        height: 100vh !important;
+        overflow: hidden;
+    }
+
+    .row.h-100 {
+        height: 100vh !important;
+        overflow: hidden;
+    }
+
+    /* Ensure right side image fits within viewport */
+    .login-image-container {
+        height: 100vh !important;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .login-image {
+        max-width: 90%;
+        max-height: 100vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    @media (max-width: 767px) {
+        .login-logo {
+            max-height: 90px;
+        }
+    }
+
+    @media (max-height: 800px) {
+        .login-image {
+            max-height: 90vh;
+        }
+    }
+
+</style>
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <!-- Left Side (Form) -->
+        <div class="col-12 col-md-5 d-flex justify-content-center align-items-center min-vh-100">
+            <div class="login-card w-100 justify-content-center">
+                <form action="/login" method="post" id="form_login" class="text-center text-md-start">
+                    <div class="mb-4 justify-content-center align-items-center d-flex">
+                        <img src="/assets/images/login/logo.png" class="login-logo img-fluid" alt="PPNI Logo">
+                    </div>
+                    <div class="mb-3 px-3 px-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="ri-mail-line"></i></span>
+                            <input class="form-control" type="text" id="login_username" name="login_username" required placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 px-3 px-md-5">
+                        <div class="input-group input-group-merge">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                            <input type="password" id="login_password" name="login_password" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 text-center w-100 px-3 px-md-5">
+                        <button id="login_button" class="border-0 w-100 py-2 teal text-white" type="submit" style="border-radius: 11px;"> 
+                            <strong>Sign In</strong>  
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side (Image: hidden on mobile) -->
+        <div class="col-7 d-none d-md-flex login-image-container p-0">
+            <img src="/assets/images/login/container.png" alt="" class="login-image">
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row">
+</div> -->
+<!-- end page -->
+
+<!-- Vendor js -->
+<script src="/assets/js/vendor.min.js"></script>
+
+<!-- App js -->
+<script src="/assets/js/app.min.js"></script>
+
+<!-- Sweetalert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Internal -->
+<script type="text/javascript" src="/script/script-login.js"></script>
+</body>
+
+</html>

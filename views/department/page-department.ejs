@@ -1,0 +1,48 @@
+<%- include('../page-header.ejs') %>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row py-3 align-items-center">
+            <div class="col-12 col-md-6">
+                <div class="page-title-box">
+                    <h4 class="mb-0">Data Departemen</h4>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Employee Spending / Master Data / Departemen</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
+                <a href="/department/add">
+                    <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">
+                        <i class="mdi mdi-plus me-1"></i> Tambah Departemen
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap table-hover" id="department-table">
+                                <thead align="center" style="background-color: #295F99 !important; color: white !important;">
+                                    <tr>
+                                        <th style="color: white;">No</th>
+                                        <th style="color: white;">ID Departemen</th>
+                                        <th style="color: white;">Nama Departemen</th>
+                                        <th style="color: white;">Tanggal Dibuat</th>
+                                        <th style="color: white;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/script/helper/script-auth.js"></script>
+<script type="text/javascript" src="/script/department/script-department.js"></script>
+<%- include('../page-footer.ejs') %>

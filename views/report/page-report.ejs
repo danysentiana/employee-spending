@@ -1,0 +1,136 @@
+<%- include('../page-header.ejs') %>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row py-3 align-items-center">
+            <div class="col-12 col-md-6">
+                <div class="page-title-box">
+                    <h4 class="mb-0">Laporan Pengeluaran</h4>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Employee Spending / Laporan / Pengeluaran</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
+                <button type="button" class="btn btn-success me-2" id="btn-export-excel">
+                    <i class="mdi mdi-file-excel me-1"></i> Export Excel
+                </button>
+                <button type="button" class="btn btn-danger" id="btn-export-pdf">
+                    <i class="mdi mdi-file-pdf me-1"></i> Export PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Pengeluaran</h5>
+                        <h2 class="mb-0" id="total-spending">Rp 0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Departemen</h5>
+                        <h2 class="mb-0" id="total-departments">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Karyawan</h5>
+                        <h2 class="mb-0" id="total-employees">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Transaksi</h5>
+                        <h2 class="mb-0" id="total-transactions">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Filter Laporan</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Departemen</label>
+                                <select class="form-select" id="filter-department">
+                                    <option value="">Semua Departemen</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Karyawan</label>
+                                <select class="form-select" id="filter-employee">
+                                    <option value="">Semua Karyawan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Tanggal Mulai</label>
+                                <input type="date" class="form-control" id="filter-start-date">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Tanggal Akhir</label>
+                                <input type="date" class="form-control" id="filter-end-date">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <button type="button" class="btn btn-primary w-100" id="btn-filter">
+                                    <i class="mdi mdi-filter me-1"></i> Filter
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nilai Min: <span id="value-min-display">Rp 0</span></label>
+                                <input type="range" class="form-range" id="filter-value-min" min="0" max="10000000" step="10000" value="0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nilai Max: <span id="value-max-display">Rp 10.000.000</span></label>
+                                <input type="range" class="form-range" id="filter-value-max" min="0" max="10000000" step="10000" value="10000000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap table-hover" id="report-table">
+                                <thead align="center" style="background-color: #295F99 !important; color: white !important;">
+                                    <tr>
+                                        <th style="color: white;">No</th>
+                                        <th style="color: white;">Tanggal</th>
+                                        <th style="color: white;">Nama Karyawan</th>
+                                        <th style="color: white;">Departemen</th>
+                                        <th style="color: white;">Nilai</th>
+                                        <th style="color: white;">Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/script/helper/script-auth.js"></script>
+<script type="text/javascript" src="/script/helper/script-form-number-format.js"></script>
+<script type="text/javascript" src="/script/report/script-report.js"></script>
+<%- include('../page-footer.ejs') %>

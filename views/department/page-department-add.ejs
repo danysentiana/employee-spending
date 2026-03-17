@@ -1,0 +1,55 @@
+<%- include('../page-header.ejs') %>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row py-3 align-items-center">
+            <div class="col-12 col-md-6">
+                <div class="page-title-box">
+                    <h4 class="mb-0"><%= typeof departmentData !== 'undefined' ? 'Edit Departemen' : 'Tambah Departemen' %></h4>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Employee Spending / Master Data / Departemen</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
+                <a href="/department">
+                    <button type="button" class="btn bg-white text-dark border me-2">
+                        <i class="mdi mdi-arrow-left me-1"></i> Kembali
+                    </button>
+                </a>
+                <button type="button" class="btn btn-primary" id="btn-save-department" style="background-color: #295F99; border-color: #295F99;">
+                    <i class="mdi mdi-content-save me-1"></i> Simpan
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Form Departemen</h5>
+
+                        <form id="form-department">
+                            <input type="hidden" name="department_id" value="<%= typeof departmentData !== 'undefined' ? departmentData.department_id : '' %>">
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Nama Departemen <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="department_name" 
+                                    placeholder="Masukkan Nama Departemen"
+                                    value="<%= typeof departmentData !== 'undefined' ? departmentData.department_name : '' %>"
+                                    required>
+                            </div>
+
+                            <div class="alert alert-info" role="alert">
+                                <i class="mdi mdi-information me-1"></i>
+                                <small>Kolom dengan tanda <span class="text-danger">*</span> wajib diisi</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/script/helper/script-auth.js"></script>
+<script type="text/javascript" src="/script/department/script-department-add.js"></script>
+<%- include('../page-footer.ejs') %>

@@ -1,0 +1,156 @@
+@-moz-keyframes loadingStart {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes loadingStart {
+    0% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+@-o-keyframes loadingStart {
+    0% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+@keyframes loadingStart {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes loading {
+    0% {
+        -moz-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes loading {
+    0% {
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -o-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    100% {
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+    background: white;
+    z-index: 999;
+
+}
+
+#css-input:checked ~ .loading .loading-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-animation: loadingStart 10ms 300ms linear 1 both;
+    -moz-animation: loadingStart 10ms 300ms linear 1 both;
+    -o-animation: loadingStart 10ms 300ms linear 1 both;
+    animation: loadingStart 10ms 300ms linear 1 both;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    z-index: 99999999999999999999999;
+    background: white;
+}
+
+#css-input:checked ~ .loading .loading-text:after {
+    content: "...";
+}
+
+#css-input:checked ~ .loading .loading-spinner {
+    position: fixed;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: -3.9375rem auto 0;
+    color: #1a1d1d;
+    text-align: center;
+}
+
+#css-input:checked ~ .loading .loading-icon {
+    width: 100px;
+    font-size: 4.8125rem;
+    line-height: 5.25rem;
+    margin: 0 auto;
+    text-shadow: rgba(255, 255, 255, 0.75) 0 0 0.5em;
+    -webkit-animation: loading 2s cubic-bezier(0.6, 0.07, 0.43, 1.1) infinite;
+    -moz-animation: loading 2s cubic-bezier(0.6, 0.07, 0.43, 1.1) infinite;
+    -o-animation: loading 2s cubic-bezier(0.6, 0.07, 0.43, 1.1) infinite;
+    animation: loading 2s cubic-bezier(0.6, 0.07, 0.43, 1.1) infinite;
+    display: block;
+    vertical-align: middle;
+}
+
+#css-input:checked ~ .loading .loading-icon:before {
+    vertical-align: middle;
+    content: "\e000";
+}
+
+#target {
+    width: auto;
+    height: auto;
+    z-index: 999999;
+}

@@ -1,0 +1,93 @@
+<%- include('../page-header.ejs') %>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row py-3 align-items-center">
+            <div class="col-12 col-md-6">
+                <div class="page-title-box">
+                    <h4 class="mb-0">Data Pengeluaran</h4>
+                    <p class="text-muted mb-0" style="font-size: 0.85rem;">Employee Spending / Transaksi / Pengeluaran</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
+                <a href="/spending/add">
+                    <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">
+                        <i class="mdi mdi-plus me-1"></i> Tambah Pengeluaran
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Filter</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Departemen</label>
+                                <select class="form-select" id="filter-department">
+                                    <option value="">Semua Departemen</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Karyawan</label>
+                                <select class="form-select" id="filter-employee">
+                                    <option value="">Semua Karyawan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Tanggal</label>
+                                <input type="date" class="form-control" id="filter-date">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Nilai Min: <span id="value-min-display">0</span></label>
+                                <input type="range" class="form-range" id="filter-value-min" min="0" max="10000000" step="10000" value="0">
+                            </div>
+                            <div class="col-md-2 mb-3 d-flex align-items-end">
+                                <div class="w-100">
+                                    <label class="form-label">Nilai Max: <span id="value-max-display">10000000</span></label>
+                                    <input type="range" class="form-range" id="filter-value-max" min="0" max="10000000" step="10000" value="10000000">
+                                    <button type="button" class="btn btn-primary w-100 mt-2" id="btn-filter">
+                                        <i class="mdi mdi-filter me-1"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-centered w-100 dt-responsive nowrap table-hover" id="spending-table">
+                                <thead align="center" style="background-color: #295F99 !important; color: white !important;">
+                                    <tr>
+                                        <th style="color: white;">No</th>
+                                        <th style="color: white;">ID Pengeluaran</th>
+                                        <th style="color: white;">Nama Karyawan</th>
+                                        <th style="color: white;">Departemen</th>
+                                        <th style="color: white;">Tanggal</th>
+                                        <th style="color: white;">Nilai</th>
+                                        <th style="color: white;">Deskripsi</th>
+                                        <th style="color: white;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/script/helper/script-auth.js"></script>
+<script type="text/javascript" src="/script/helper/script-form-number-format.js"></script>
+<script type="text/javascript" src="/script/spending/script-spending.js"></script>
+<%- include('../page-footer.ejs') %>
