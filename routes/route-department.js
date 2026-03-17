@@ -12,8 +12,6 @@ router.get('/add', (req, res) => {
 });
 
 router.get('/table', async (req, res) => {
-    console.log("Query Params:", req.query);
-    
     const draw = req.query.draw;
     const start = parseInt(req.query.start);
     const length = parseInt(req.query.length);
@@ -65,6 +63,8 @@ router.post('/add', async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
     try {
         const departmentId = req.params.id;
+        console.log(departmentId);
+        
         const result = await backend.getDepartmentById(departmentId);
 
         if (result.status !== 'ok') {
@@ -136,6 +136,23 @@ router.get('/all', async (req, res) => {
         res.status(500).json({
             status: "nok",
             message: "Terjadi kesalahan server"
+        });
+    }
+});
+
+router.get('/detail/:id', async (req, res) => {
+    const departmentId = req.params.id;
+    const token = req.headers["authorization"]?.replace("Bearer ", "");
+
+    try {
+        await auth.authCheck(token);
+        const result = await backend.getDepartmentById(departmentId);
+        res.json(result);
+    } catch (error) {
+        const statusCode = error?.message?.toLowerCase().includes("token") ? 401 : 500;
+        res.status(statusCode).json({
+            status: "nok",
+            message: error?.message || "Terjadi kesalahan server"
         });
     }
 });

@@ -25,8 +25,6 @@ $(document).ready(function() {
                 'Authorization': 'Bearer ' + token
             },
             success: function(response) {
-                console.log(response);
-                
                 if (response.status === 'ok') {
                     renderDepartmentTable(response.data);
                 } else {
@@ -59,7 +57,6 @@ $(document).ready(function() {
                     <td class="text-center">${index + 1}</td>
                     <td class="text-center">${dept.department_id}</td>
                     <td>${dept.department_name}</td>
-                    <td class="text-center">${formatDate(dept.created_at)}</td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm btn-info btn-edit" data-id="${dept.department_id}">
                             <i class="mdi mdi-pencil"></i>
@@ -76,7 +73,8 @@ $(document).ready(function() {
         // Edit button click
         $('.btn-edit').on('click', function() {
             const id = $(this).data('id');
-            window.location.href = `/department/add?id=${id}`;
+            showDetail(id);
+            $('#editDepartmentModal').modal('show');
         });
 
         // Delete button click
@@ -113,6 +111,108 @@ $(document).ready(function() {
             }
         });
     }
+
+    function showDetail(id) {
+        $.ajax({
+            url: `/department/detail/${id}`,
+            type: "GET",
+            beforeSend: function (xhr) {
+                if (localStorage.token) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + localStorage.token);
+                }
+            },
+            error: function (error) {
+                if (error.status === 401) {
+                    localStorage.removeItem("token");
+                    $(location).attr("href", "/");
+                }
+            },
+            success: function (res) {
+                $("#edit-department-name").val(res.data.department_name);
+                $("#edit-department-form").data('id', res.data.department_id);
+            },
+        });
+    }
+
+    // Add department form submission
+    $('#add-department-form').on('submit', function(e) {
+        e.preventDefault();
+        const departmentName = $('#department-name').val();
+
+        if (!departmentName) {
+            showError('Nama departemen harus diisi');
+            return;
+        }
+
+        $.ajax({
+            url: '/department/add',
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                department_name: departmentName
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    showSuccess('Departemen berhasil ditambahkan');
+                    $('#addDepartmentModal').modal('hide');
+                    $('#department-name').val('');
+                    loadDepartments();
+                } else {
+                    showError(response.message || 'Gagal menambahkan departemen');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                } else {
+                    showError('Terjadi kesalahan saat menambahkan data');
+                }
+            }
+        });
+    });
+
+    // Edit department form submission
+    $('#edit-department-form').on('submit', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        const departmentName = $('#edit-department-name').val();
+
+        if (!departmentName) {
+            showError('Nama departemen harus diisi');
+            return;
+        }
+
+        $.ajax({
+            url: '/department/update/' + id,
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                department_name: departmentName
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    showSuccess('Departemen berhasil diperbarui');
+                    $('#editDepartmentModal').modal('hide');
+                    loadDepartments();
+                } else {
+                    showError(response.message || 'Gagal memperbarui departemen');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                } else {
+                    showError('Terjadi kesalahan saat memperbarui data');
+                }
+            }
+        });
+    });
 
     function formatDate(dateString) {
         if (!dateString) return '-';

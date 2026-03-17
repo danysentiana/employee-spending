@@ -12,18 +12,12 @@ const setDepartmentTable = async (start, length, draw, order, filter, decoded) =
             .select("*")
             .orderBy("department_id", "desc");
 
-        console.log(query);
-        
-
         switch (orderColumn) {
             case 1:
                 query = query.orderBy("department_id", orderDir);
                 break;
             case 2:
                 query = query.orderBy("department_name", orderDir);
-                break;
-            case 3:
-                query = query.orderBy("created_at", orderDir);
                 break;
             default:
                 query = query.orderBy("department_id", orderDir);
@@ -37,7 +31,6 @@ const setDepartmentTable = async (start, length, draw, order, filter, decoded) =
                 no: index + 1 + start,
                 department_id: row.department_id,
                 department_name: row.department_name,
-                created_at: row.created_at
             };
         });
         return {
@@ -64,8 +57,7 @@ const createDepartment = async (data, user) => {
         }
 
         const [newDepartmentId] = await db("Departments").insert({
-            department_name: data.department_name,
-            created_at: new Date()
+            department_name: data.department_name
         }).returning("department_id");
 
         return {
@@ -110,8 +102,7 @@ const updateDepartment = async (id, data, user) => {
         }
 
         await db("Departments").where("department_id", id).update({
-            department_name: data.department_name,
-            updated_at: new Date()
+            department_name: data.department_name
         });
 
         return {

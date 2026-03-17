@@ -21,8 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-console.log("App is running in " + process.env.NODE_ENV + " mode.");
-
 //----------
 import login from "./routes/route-login.js";
 import department from "./routes/route-department.js";

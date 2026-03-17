@@ -10,11 +10,9 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
-                <a href="/department/add">
-                    <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">
-                        <i class="mdi mdi-plus me-1"></i> Tambah Departemen
-                    </button>
-                </a>
+                <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+                    <i class="mdi mdi-plus me-1"></i> Tambah Departemen
+                </button>
             </div>
         </div>
 
@@ -29,7 +27,6 @@
                                         <th style="color: white;">No</th>
                                         <th style="color: white;">ID Departemen</th>
                                         <th style="color: white;">Nama Departemen</th>
-                                        <th style="color: white;">Tanggal Dibuat</th>
                                         <th style="color: white;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -38,6 +35,55 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for adding department -->
+  <div class="modal fade" id="addDepartmentModal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Tambah Departemen</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-department-form">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="department-name" class="form-label">Nama Departemen</label>
+                            <input type="text" class="form-control" id="department-name" name="department_name" placeholder="Masukkan nama departemen" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" form="add-department-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for editing department -->
+<div class="modal fade" id="editDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="editDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDepartmentModalLabel">Edit Departemen</h5>
+            </div>
+            <div class="modal-body">
+                <form id="edit-department-form">
+                    <div class="mb-3">
+                        <label for="edit-department-name" class="form-label">Nama Departemen</label>
+                        <input type="text" class="form-control" id="edit-department-name" name="department_name" placeholder="Masukkan nama departemen" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" form="edit-department-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
             </div>
         </div>
     </div>
