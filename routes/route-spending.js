@@ -81,6 +81,22 @@ router.get('/edit/:id', async (req, res) => {
     }
 });
 
+router.get('/detail/:id', async (req, res) => {
+    const spendingId = req.params.id;
+    try {
+        const result = await backend.getSpendingById(spendingId);
+        if (result.status !== 'ok') {
+            return res.status(404).json(result);
+        }
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({
+            status: "nok",
+            message: "Terjadi kesalahan server"
+        });
+    }
+});
+
 router.post('/update/:id', async (req, res) => {
     const token = req.headers["authorization"]?.replace("Bearer ", "");
     const spendingId = req.params.id;

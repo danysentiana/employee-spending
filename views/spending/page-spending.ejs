@@ -10,11 +10,9 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
-                <a href="/spending/add">
-                    <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">
-                        <i class="mdi mdi-plus me-1"></i> Tambah Pengeluaran
-                    </button>
-                </a>
+                <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;" data-bs-toggle="modal" data-bs-target="#addSpendingModal">
+                    <i class="mdi mdi-plus me-1"></i> Tambah Pengeluaran
+                </button>
             </div>
         </div>
 
@@ -73,7 +71,6 @@
                                         <th style="color: white;">Departemen</th>
                                         <th style="color: white;">Tanggal</th>
                                         <th style="color: white;">Nilai</th>
-                                        <th style="color: white;">Deskripsi</th>
                                         <th style="color: white;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -82,6 +79,88 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for adding spending -->
+<div class="modal fade" id="addSpendingModal" tabindex="-1" role="dialog" aria-labelledby="addSpendingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addSpendingModalLabel">Tambah Pengeluaran</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-spending-form">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="department-select" class="form-label">Departemen</label>
+                            <select class="form-select" id="department-select" name="department_id" required>
+                                <option value="">Pilih Departemen</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="employee-select" class="form-label">Karyawan</label>
+                            <select class="form-select" id="employee-select" name="employee_id" required>
+                                <option value="">Pilih Karyawan</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="spending-date" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="spending-date" name="spending_date" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="spending-value" class="form-label">Nilai</label>
+                            <input type="number" class="form-control" id="spending-value" name="value" placeholder="Masukkan nilai" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" form="add-spending-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for editing spending -->
+<div class="modal fade" id="editSpendingModal" tabindex="-1" role="dialog" aria-labelledby="editSpendingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSpendingModalLabel">Edit Pengeluaran</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-spending-form">
+                    <div class="mb-3">
+                        <label for="edit-department-select" class="form-label">Departemen</label>
+                        <select class="form-select" id="edit-department-select" name="department_id" required>
+                            <option value="">Pilih Departemen</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-employee-select" class="form-label">Karyawan</label>
+                        <select class="form-select" id="edit-employee-select" name="employee_id" required>
+                            <option value="">Pilih Karyawan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-spending-date" class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" id="edit-spending-date" name="spending_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-spending-value" class="form-label">Nilai</label>
+                        <input type="number" class="form-control" id="edit-spending-value" name="value" placeholder="Masukkan nilai" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" form="edit-spending-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
             </div>
         </div>
     </div>

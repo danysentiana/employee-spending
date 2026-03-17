@@ -12,7 +12,7 @@ const setSpendingTable = async (start, length, draw, order, filter, decoded) => 
             .leftJoin("Employees as e", "s.employee_id", "e.employee_id")
             .leftJoin("Departments as d", "e.department_id", "d.department_id")
             .select(db.raw("s.*, e.employee_id, e.employee_name, e.department_id, d.department_name"))
-            .orderBy("s.spending_id", "desc");
+            .orderBy("s.value", "desc");
 
         // Apply filters
         if (filter.search_department) {
@@ -44,9 +44,6 @@ const setSpendingTable = async (start, length, draw, order, filter, decoded) => 
             case 5:
                 query = query.orderBy("s.value", orderDir);
                 break;
-            case 6:
-                query = query.orderBy("s.created_at", orderDir);
-                break;
             default:
                 query = query.orderBy("s.spending_id", orderDir);
                 break;
@@ -64,7 +61,6 @@ const setSpendingTable = async (start, length, draw, order, filter, decoded) => 
                 department_name: row.department_name,
                 spending_date: row.spending_date,
                 value: row.value,
-                description: row.description
             };
         });
         return {
@@ -99,9 +95,7 @@ const createSpending = async (data, user) => {
         const [newSpendingId] = await db("Spendings").insert({
             employee_id: data.employee_id,
             spending_date: data.spending_date,
-            value: data.value,
-            description: data.description || null,
-            created_at: new Date()
+            value: data.value
         }).returning("spending_id");
 
         return {
@@ -123,7 +117,7 @@ const getSpendingById = async (id) => {
         const spendingData = await db("Spendings as s")
             .leftJoin("Employees as e", "s.employee_id", "e.employee_id")
             .leftJoin("Departments as d", "e.department_id", "d.department_id")
-            .select(db.raw("s.*, e.employee_name, d.department_name"))
+            .select(db.raw("s.*, e.employee_name, d.department_name, d.department_id"))
             .where("s.spending_id", id)
             .first();
         
@@ -160,9 +154,7 @@ const updateSpending = async (id, data, user) => {
         await db("Spendings").where("spending_id", id).update({
             employee_id: data.employee_id,
             spending_date: data.spending_date,
-            value: data.value,
-            description: data.description || null,
-            updated_at: new Date()
+            value: data.value
         });
 
         return {
@@ -203,7 +195,6 @@ const getSpendingReportData = async (filter) => {
                 s.spending_id,
                 s.spending_date,
                 s.value,
-                s.description,
                 e.employee_name,
                 d.department_name
             `))

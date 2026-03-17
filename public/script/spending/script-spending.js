@@ -11,6 +11,26 @@ $(document).ready(function() {
     loadEmployees();
     loadSpendings();
 
+    // Load departments and employees for modal when add modal is shown
+    $('#addSpendingModal').on('show.bs.modal', function() {
+        loadModalDepartments('department-select', 'employee-select');
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        $('#spending-date').val(today);
+    });
+
+    // Department change event in add modal
+    $('#department-select').on('change', function() {
+        const deptId = $(this).val();
+        loadModalEmployeesByDepartment(deptId, 'employee-select');
+    });
+
+    // Department change event in edit modal
+    $('#edit-department-select').on('change', function() {
+        const deptId = $(this).val();
+        loadModalEmployeesByDepartment(deptId, 'edit-employee-select');
+    });
+
     // Filter button click
     $('#btn-filter').on('click', function() {
         const departmentId = $('#filter-department').val();
@@ -19,6 +39,129 @@ $(document).ready(function() {
         const valueMin = $('#filter-value-min').val();
         const valueMax = $('#filter-value-max').val();
         loadSpendings(departmentId, employeeId, date, valueMin, valueMax);
+    });
+
+    // Add spending form submission
+    $('#add-spending-form').on('submit', function(e) {
+        e.preventDefault();
+        const departmentId = $('#department-select').val();
+        const employeeId = $('#employee-select').val();
+        const spendingDate = $('#spending-date').val();
+        const value = $('#spending-value').val();
+
+        // Validation
+        if (!departmentId) {
+            showError('Departemen harus dipilih');
+            return;
+        }
+        if (!employeeId) {
+            showError('Karyawan harus dipilih');
+            return;
+        }
+        if (!spendingDate) {
+            showError('Tanggal harus diisi');
+            return;
+        }
+        if (!value || value <= 0) {
+            showError('Nilai harus diisi dan lebih dari 0');
+            return;
+        }
+
+        $.ajax({
+            url: '/spending/add',
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                department_id: departmentId,
+                employee_id: employeeId,
+                spending_date: spendingDate,
+                value: value
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    showSuccess('Pengeluaran berhasil ditambahkan');
+                    $('#addSpendingModal').modal('hide');
+                    $('#add-spending-form')[0].reset();
+                    loadSpendings();
+                } else {
+                    showError(response.message || 'Gagal menambahkan pengeluaran');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                } else if (xhr.status === 403) {
+                    showError('Anda tidak memiliki izin untuk melakukan aksi ini');
+                } else {
+                    showError('Terjadi kesalahan saat menambahkan data');
+                }
+            }
+        });
+    });
+
+    // Edit spending form submission
+    $('#edit-spending-form').on('submit', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        const departmentId = $('#edit-department-select').val();
+        const employeeId = $('#edit-employee-select').val();
+        const spendingDate = $('#edit-spending-date').val();
+        const value = $('#edit-spending-value').val();
+
+        // Validation
+        if (!departmentId) {
+            showError('Departemen harus dipilih');
+            return;
+        }
+        if (!employeeId) {
+            showError('Karyawan harus dipilih');
+            return;
+        }
+        if (!spendingDate) {
+            showError('Tanggal harus diisi');
+            return;
+        }
+        if (!value || value <= 0) {
+            showError('Nilai harus diisi dan lebih dari 0');
+            return;
+        }
+
+        $.ajax({
+            url: '/spending/update/' + id,
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                spending_id: id,
+                department_id: departmentId,
+                employee_id: employeeId,
+                spending_date: spendingDate,
+                value: value
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    showSuccess('Pengeluaran berhasil diperbarui');
+                    $('#editSpendingModal').modal('hide');
+                    loadSpendings();
+                } else {
+                    showError(response.message || 'Gagal memperbarui pengeluaran');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                } else if (xhr.status === 403) {
+                    showError('Anda tidak memiliki izin untuk melakukan aksi ini');
+                } else {
+                    showError('Terjadi kesalahan saat memperbarui data');
+                }
+            }
+        });
     });
 
     // Value range slider display updates
@@ -98,7 +241,7 @@ $(document).ready(function() {
             data: {
                 start: 0,
                 length: 1000,
-                draw:1,
+                draw: 1,
                 order: [{column: 0, dir: 'asc'}],
                 search_department: departmentId
             },
@@ -126,6 +269,109 @@ $(document).ready(function() {
         });
     }
 
+    function loadModalDepartments(deptSelectId, empSelectId, callback) {
+        const deptSelect = $('#' + deptSelectId);
+        const empSelect = $('#' + empSelectId);
+        deptSelect.empty();
+        deptSelect.append('<option value="">Pilih Departemen</option>');
+        empSelect.empty();
+        empSelect.append('<option value="">Pilih Karyawan</option>');
+        
+        $.ajax({
+            url: '/department/all',
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    response.data.forEach(dept => {
+                        deptSelect.append(`<option value="${dept.department_id}">${dept.department_name}</option>`);
+                    });
+                    // Execute callback if provided
+                    if (callback) {
+                        callback();
+                    }
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
+            }
+        });
+    }
+
+    function loadModalEmployeesByDepartment(departmentId, empSelectId) {
+        const empSelect = $('#' + empSelectId);
+        empSelect.empty();
+        empSelect.append('<option value="">Pilih Karyawan</option>');
+        
+        if (!departmentId) return;
+        
+        $.ajax({
+            url: '/employee/table',
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                start: 0,
+                length: 1000,
+                draw: 1,
+                order: [{column: 0, dir: 'asc'}],
+                search_department: departmentId
+            },
+            success: function(response) {
+                if (response.status === 'ok') {
+                    response.data.forEach(emp => {
+                        empSelect.append(`<option value="${emp.employee_id}">${emp.employee_name}</option>`);
+                    });
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
+            }
+        });
+    }
+
+    function showDetail(id) {
+        // Load departments first, then load data
+        loadModalDepartments('edit-department-select', 'edit-employee-select', function() {
+            $.ajax({
+                url: `/spending/detail/${id}`,
+                type: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                error: function (error) {
+                    if (error.status === 401) {
+                        localStorage.removeItem("token");
+                        window.location.href = '/login';
+                    }
+                },
+                success: function (res) {
+                    if (res.status === 'ok') {
+                        $('#edit-department-select').val(res.data.department_id).trigger('change');
+                        loadModalEmployeesByDepartment(res.data.department_id, 'edit-employee-select');
+                        setTimeout(() => {
+                            $('#edit-employee-select').val(res.data.employee_id).trigger('change');
+                        }, 100);
+                        $('#edit-spending-date').val(res.data.spending_date);
+                        $('#edit-spending-value').val(res.data.value);
+                        $('#edit-spending-form').data('id', res.data.spending_id);
+                    } else {
+                        showError('Gagal memuat data pengeluaran');
+                    }
+                },
+            });
+        });
+    }
+
     function loadSpendings(departmentId = '', employeeId = '', date = '', valueMin = '', valueMax = '') {
         $.ajax({
             url: '/spending/table',
@@ -136,7 +382,7 @@ $(document).ready(function() {
             data: {
                 start: 0,
                 length: 1000,
-                draw:1,
+                draw: 1,
                 order: [{column: 0, dir: 'asc'}],
                 search_department: departmentId,
                 search_employee: employeeId,
@@ -168,7 +414,7 @@ $(document).ready(function() {
         tbody.empty();
 
         if (spendings.length === 0) {
-            tbody.html('<tr><td colspan="8" class="text-center">Tidak ada data pengeluaran</td></tr>');
+            tbody.html('<tr><td colspan="7" class="text-center">Tidak ada data pengeluaran</td></tr>');
             return;
         }
 
@@ -181,7 +427,6 @@ $(document).ready(function() {
                     <td>${spending.department_name || '-'}</td>
                     <td class="text-center">${formatDate(spending.spending_date)}</td>
                     <td class="text-end">${formatCurrency(spending.value)}</td>
-                    <td>${spending.description || '-'}</td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm btn-info btn-edit" data-id="${spending.spending_id}">
                             <i class="mdi mdi-pencil"></i>
@@ -198,7 +443,8 @@ $(document).ready(function() {
         // Edit button click
         $('.btn-edit').on('click', function() {
             const id = $(this).data('id');
-            window.location.href = `/spending/add?id=${id}`;
+            showDetail(id);
+            $('#editSpendingModal').modal('show');
         });
 
         // Delete button click
