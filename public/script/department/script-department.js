@@ -72,6 +72,13 @@ $(document).ready(function() {
 
         // Edit button click
         $('.btn-edit').on('click', function() {
+            const userRole = localStorage.getItem('role');
+            
+            if (userRole === 'user') {
+                showError('Akses ditolak: Hanya Admin yang dapat melakukan aksi ini.');
+                return;
+            }
+            
             const id = $(this).data('id');
             showDetail(id);
             $('#editDepartmentModal').modal('show');
@@ -79,6 +86,13 @@ $(document).ready(function() {
 
         // Delete button click
         $('.btn-delete').on('click', function() {
+            const userRole = localStorage.getItem('role');
+            
+            if (userRole === 'user') {
+                showError('Akses ditolak: Hanya Admin yang dapat melakukan aksi ini.');
+                return;
+            }
+            
             const id = $(this).data('id');
             if (confirm('Apakah Anda yakin ingin menghapus departemen ini?')) {
                 deleteDepartment(id);

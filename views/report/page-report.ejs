@@ -74,28 +74,48 @@
                                     <option value="">Semua Karyawan</option>
                                 </select>
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label class="form-label">Tanggal Mulai</label>
                                 <input type="date" class="form-control" id="filter-start-date">
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label class="form-label">Tanggal Akhir</label>
                                 <input type="date" class="form-control" id="filter-end-date">
                             </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Rentang Nilai</label>
+                                <select class="form-select" id="filter-value-range">
+                                    <option value="">Semua Nilai</option>
+                                    <option value="0-100000">< Rp 100.000</option>
+                                    <option value="100000-500000">Rp 100.000 - 500.000</option>
+                                    <option value="500000-1000000">Rp 500.000 - 1.000.000</option>
+                                    <option value="1000000-5000000">Rp 1.000.000 - 5.000.000</option>
+                                    <option value="5000000-10000000">> Rp 5.000.000</option>
+                                </select>
+                            </div>
                             <div class="col-md-2 mb-3">
+                                <label class="form-label">Nilai Min</label>
+                                <input type="number" class="form-control" id="filter-value-min-input" min="0" placeholder="0">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">Nilai Max</label>
+                                <input type="number" class="form-control" id="filter-value-max-input" min="0" placeholder="10000000">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Slider Nilai <small class="text-muted">(<span id="value-min-display">Rp 0</span> - <span id="value-max-display">Rp 10.000.000</span>)</small></label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="range" class="form-range flex-fill" id="filter-value-min" min="0" max="10000000" step="10000" value="0">
+                                    <input type="range" class="form-range flex-fill" id="filter-value-max" min="0" max="10000000" step="10000" value="10000000">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label">&nbsp;</label>
                                 <button type="button" class="btn btn-primary w-100" id="btn-filter">
                                     <i class="mdi mdi-filter me-1"></i> Filter
                                 </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nilai Min: <span id="value-min-display">Rp 0</span></label>
-                                <input type="range" class="form-range" id="filter-value-min" min="0" max="10000000" step="10000" value="0">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nilai Max: <span id="value-max-display">Rp 10.000.000</span></label>
-                                <input type="range" class="form-range" id="filter-value-max" min="0" max="10000000" step="10000" value="10000000">
                             </div>
                         </div>
                     </div>
@@ -117,7 +137,6 @@
                                         <th style="color: white;">Nama Karyawan</th>
                                         <th style="color: white;">Departemen</th>
                                         <th style="color: white;">Nilai</th>
-                                        <th style="color: white;">Deskripsi</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

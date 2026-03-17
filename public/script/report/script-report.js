@@ -9,6 +9,9 @@ $(document).ready(function() {
     // Load data
     loadDepartments();
     loadSummary();
+    
+    // Load initial report data without filters
+    loadReportData();
 
     // Filter button click
     $('#btn-filter').on('click', function() {
@@ -17,18 +20,87 @@ $(document).ready(function() {
         const startDate = $('#filter-start-date').val();
         const endDate = $('#filter-end-date').val();
         
+        // Get value range from priority: input > slider > dropdown
+        let valueMin = $('#filter-value-min-input').val() || $('#filter-value-min').val();
+        let valueMax = $('#filter-value-max-input').val() || $('#filter-value-max').val();
+        
+        // If dropdown is selected, use dropdown values
+        const rangeValue = $('#filter-value-range').val();
+        if (rangeValue) {
+            const [min, max] = rangeValue.split('-');
+            valueMin = min;
+            valueMax = max;
+        }
+        
         // Update employee filter based on department
         if (departmentId) {
             loadEmployeesByDepartment(departmentId);
         }
         
-        loadReportData(departmentId, employeeId, startDate, endDate);
+        loadReportData(departmentId, employeeId, startDate, endDate, valueMin, valueMax);
     });
 
     // Department change event
     $('#filter-department').on('change', function() {
         const deptId = $(this).val();
         loadEmployeesByDepartment(deptId);
+    });
+
+    // Value range dropdown change
+    $('#filter-value-range').on('change', function() {
+        const rangeValue = $(this).val();
+        if (rangeValue) {
+            const [min, max] = rangeValue.split('-');
+            $('#filter-value-min-input').val(min);
+            $('#filter-value-max-input').val(max);
+            $('#filter-value-min').val(min);
+            $('#filter-value-max').val(max);
+            $('#value-min-display').text(formatCurrency(min));
+            $('#value-max-display').text(formatCurrency(max));
+        } else {
+            $('#filter-value-min-input').val('');
+            $('#filter-value-max-input').val('');
+            $('#filter-value-min').val(0);
+            $('#filter-value-max').val(10000000);
+            $('#value-min-display').text('Rp 0');
+            $('#value-max-display').text('Rp 10.000.000');
+        }
+    });
+
+    // Value min input change
+    $('#filter-value-min-input').on('change', function() {
+        const value = $(this).val();
+        if (value) {
+            $('#filter-value-min').val(value);
+            $('#value-min-display').text(formatCurrency(value));
+            $('#filter-value-range').val('');
+        }
+    });
+
+    // Value max input change
+    $('#filter-value-max-input').on('change', function() {
+        const value = $(this).val();
+        if (value) {
+            $('#filter-value-max').val(value);
+            $('#value-max-display').text(formatCurrency(value));
+            $('#filter-value-range').val('');
+        }
+    });
+
+    // Value min slider change
+    $('#filter-value-min').on('input', function() {
+        const value = $(this).val();
+        $('#filter-value-min-input').val(value);
+        $('#value-min-display').text(formatCurrency(value));
+        $('#filter-value-range').val('');
+    });
+
+    // Value max slider change
+    $('#filter-value-max').on('input', function() {
+        const value = $(this).val();
+        $('#filter-value-max-input').val(value);
+        $('#value-max-display').text(formatCurrency(value));
+        $('#filter-value-range').val('');
     });
 
     // Export Excel button click
@@ -171,12 +243,14 @@ $(document).ready(function() {
         $('#total-transactions').text(data.total_transactions || 0);
     }
 
-    function loadReportData(departmentId = '', employeeId = '', startDate = '', endDate = '') {
+    function loadReportData(departmentId = '', employeeId = '', startDate = '', endDate = '', valueMin = '', valueMax = '') {
         const data = {};
         if (departmentId) data.department_id = departmentId;
         if (employeeId) data.employee_id = employeeId;
         if (startDate) data.date_from = startDate;
         if (endDate) data.date_to = endDate;
+        if (valueMin) data.value_min = valueMin;
+        if (valueMax) data.value_max = valueMax;
 
         $.ajax({
             url: '/report/data',
@@ -209,7 +283,7 @@ $(document).ready(function() {
         tbody.empty();
 
         if (spendings.length === 0) {
-            tbody.html('<tr><td colspan="6" class="text-center">Tidak ada data laporan</td></tr>');
+            tbody.html('<tr><td colspan="5" class="text-center">Tidak ada data laporan</td></tr>');
             return;
         }
 
@@ -221,7 +295,6 @@ $(document).ready(function() {
                     <td>${spending.employee_name}</td>
                     <td>${spending.department_name || '-'}</td>
                     <td class="text-end">${formatCurrency(spending.value)}</td>
-                    <td>${spending.description || '-'}</td>
                 </tr>
             `;
             tbody.append(row);
@@ -233,12 +306,24 @@ $(document).ready(function() {
         const employeeId = $('#filter-employee').val();
         const startDate = $('#filter-start-date').val();
         const endDate = $('#filter-end-date').val();
+        
+        // Get value range
+        let valueMin = $('#filter-value-min-input').val() || $('#filter-value-min').val();
+        let valueMax = $('#filter-value-max-input').val() || $('#filter-value-max').val();
+        const rangeValue = $('#filter-value-range').val();
+        if (rangeValue) {
+            const [min, max] = rangeValue.split('-');
+            valueMin = min;
+            valueMax = max;
+        }
 
         const data = {};
         if (departmentId) data.department_id = departmentId;
         if (employeeId) data.employee_id = employeeId;
         if (startDate) data.date_from = startDate;
         if (endDate) data.date_to = endDate;
+        if (valueMin) data.value_min = valueMin;
+        if (valueMax) data.value_max = valueMax;
 
         $.ajax({
             url: '/report/export/excel',
@@ -274,12 +359,24 @@ $(document).ready(function() {
         const employeeId = $('#filter-employee').val();
         const startDate = $('#filter-start-date').val();
         const endDate = $('#filter-end-date').val();
+        
+        // Get value range
+        let valueMin = $('#filter-value-min-input').val() || $('#filter-value-min').val();
+        let valueMax = $('#filter-value-max-input').val() || $('#filter-value-max').val();
+        const rangeValue = $('#filter-value-range').val();
+        if (rangeValue) {
+            const [min, max] = rangeValue.split('-');
+            valueMin = min;
+            valueMax = max;
+        }
 
         const data = {};
         if (departmentId) data.department_id = departmentId;
         if (employeeId) data.employee_id = employeeId;
         if (startDate) data.date_from = startDate;
         if (endDate) data.date_to = endDate;
+        if (valueMin) data.value_min = valueMin;
+        if (valueMax) data.value_max = valueMax;
 
         $.ajax({
             url: '/report/export/pdf',

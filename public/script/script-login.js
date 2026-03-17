@@ -52,10 +52,28 @@ function login() {
         } else {
           localStorage.setItem("statuz", "Sukses");
           localStorage.setItem("token", res.data);
+          // Decode token to get user role
+          const tokenData = parseJwt(res.data);
+          localStorage.setItem("role", tokenData.roleName);
           $(location).attr("href", "/department");
         }
       },
     });
   });
+}
+
+// Helper function to decode JWT token
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('Error parsing JWT:', e);
+    return {};
+  }
 }
 

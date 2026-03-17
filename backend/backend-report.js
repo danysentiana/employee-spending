@@ -4,6 +4,9 @@ import PDFDocument from "pdfkit";
 
 const exportToExcel = async (filter) => {
     try {
+        // Get current year
+        const currentYear = new Date().getFullYear();
+        
         const spendingsResult = await db("Spendings as s")
             .join("Employees as e", "s.employee_id", "e.employee_id")
             .join("Departments as d", "e.department_id", "d.department_id")
@@ -11,11 +14,10 @@ const exportToExcel = async (filter) => {
                 s.spending_id,
                 s.spending_date,
                 s.value,
-                s.description,
                 e.employee_name,
                 d.department_name
             `))
-            .whereBetween("s.spending_date", ['2020-01-01', '2025-12-31']);
+            .whereBetween("s.spending_date", ['2020-01-01', `${currentYear}-12-31`]);
 
         let query = spendingsResult;
 
@@ -45,8 +47,7 @@ const exportToExcel = async (filter) => {
             { header: 'Tanggal', key: 'spending_date', width: 15 },
             { header: 'Nama Karyawan', key: 'employee_name', width: 25 },
             { header: 'Departemen', key: 'department_name', width: 20 },
-            { header: 'Nilai (IDR)', key: 'value', width: 20 },
-            { header: 'Deskripsi', key: 'description', width: 40 }
+            { header: 'Nilai (IDR)', key: 'value', width: 20 }
         ];
 
         // Add header style
@@ -64,8 +65,7 @@ const exportToExcel = async (filter) => {
                 spending_date: new Date(row.spending_date).toLocaleDateString('id-ID'),
                 employee_name: row.employee_name,
                 department_name: row.department_name,
-                value: row.value,
-                description: row.description || '-'
+                value: row.value
             });
         });
 
@@ -90,6 +90,9 @@ const exportToExcel = async (filter) => {
 
 const exportToPDF = async (filter) => {
     try {
+        // Get current year
+        const currentYear = new Date().getFullYear();
+        
         const spendingsResult = await db("Spendings as s")
             .join("Employees as e", "s.employee_id", "e.employee_id")
             .join("Departments as d", "e.department_id", "d.department_id")
@@ -97,11 +100,10 @@ const exportToPDF = async (filter) => {
                 s.spending_id,
                 s.spending_date,
                 s.value,
-                s.description,
                 e.employee_name,
                 d.department_name
             `))
-            .whereBetween("s.spending_date", ['2020-01-01', '2025-12-31']);
+            .whereBetween("s.spending_date", ['2020-01-01', `${currentYear}-12-31`]);
 
         let query = spendingsResult;
 
@@ -145,15 +147,15 @@ const exportToPDF = async (filter) => {
         // Table setup
         const tableTop = doc.y;
         const tableLeft = 50;
-        const colWidths = [30, 80, 100, 80, 80, 120];
+        const colWidths = [30, 80, 100, 80, 80];
         const rowHeight = 25;
 
         // Table header
-        const headers = ['No', 'Tanggal', 'Nama Karyawan', 'Departemen', 'Nilai', 'Deskripsi'];
+        const headers = ['No', 'Tanggal', 'Nama Karyawan', 'Departemen', 'Nilai'];
         let xPos = tableLeft;
 
         // Draw header background
-        doc.fillColor('#E0E0E0').rect(tableLeft, tableTop, 490, rowHeight).fill();
+        doc.fillColor('#E0E0E0').rect(tableLeft, tableTop, 370, rowHeight).fill();
         
         // Draw header text
         doc.fillColor('black').fontSize(9);
@@ -176,7 +178,7 @@ const exportToPDF = async (filter) => {
 
             // Draw row border
             doc.strokeColor('#CCCCCC').lineWidth(0.5)
-                .rect(tableLeft, yPos, 490, rowHeight).stroke();
+                .rect(tableLeft, yPos, 370, rowHeight).stroke();
 
             // Draw cell content
             xPos = tableLeft;
@@ -185,8 +187,7 @@ const exportToPDF = async (filter) => {
                 new Date(row.spending_date).toLocaleDateString('id-ID'),
                 row.employee_name || '-',
                 row.department_name || '-',
-                `Rp ${row.value.toLocaleString('id-ID')}`,
-                row.description || '-'
+                `Rp ${row.value.toLocaleString('id-ID')}`
             ];
 
             cells.forEach((cell, i) => {
@@ -199,7 +200,7 @@ const exportToPDF = async (filter) => {
 
         // Draw total
         doc.moveDown();
-        doc.fontSize(12).font('bold').text(`Total: Rp ${total.toLocaleString('id-ID')}`, { align: 'right' });
+        doc.fontSize(12).text(`Total: Rp ${total.toLocaleString('id-ID')}`, { align: 'right' });
 
         doc.end();
 
@@ -221,6 +222,9 @@ const exportToPDF = async (filter) => {
 
 const getReportSummary = async (filter) => {
     try {
+        // Get current year
+        const currentYear = new Date().getFullYear();
+        
         let query = db("Spendings as s")
             .join("Employees as e", "s.employee_id", "e.employee_id")
             .join("Departments as d", "e.department_id", "d.department_id")
@@ -229,7 +233,7 @@ const getReportSummary = async (filter) => {
                 SUM(s.value) as total_value,
                 AVG(s.value) as average_value
             `))
-            .whereBetween("s.spending_date", ['2020-01-01', '2025-12-31']);
+            .whereBetween("s.spending_date", ['2020-01-01', `${currentYear}-12-31`]);
 
         // Apply filters
         if (filter.department_id) {
@@ -263,6 +267,9 @@ const getReportSummary = async (filter) => {
 
 const getReportData = async (filter) => {
     try {
+        // Get current year
+        const currentYear = new Date().getFullYear();
+        
         let query = db("Spendings as s")
             .join("Employees as e", "s.employee_id", "e.employee_id")
             .join("Departments as d", "e.department_id", "d.department_id")
@@ -270,11 +277,10 @@ const getReportData = async (filter) => {
                 s.spending_id,
                 s.spending_date,
                 s.value,
-                s.description,
                 e.employee_name,
                 d.department_name
             `))
-            .whereBetween("s.spending_date", ['2020-01-01', '2025-12-31'])
+            .whereBetween("s.spending_date", ['2020-01-01', `${currentYear}-12-31`])
             .orderBy("s.spending_date", "desc");
 
         // Apply filters
