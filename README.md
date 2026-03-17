@@ -128,7 +128,7 @@ Saat pertama kali running, Anda perlu membuat akun di database manual atau mengg
    - employee_id, employee_name, department_id
 
 4. **Spendings** - Data pengeluaran
-   - spending_id, employee_id, spending_date, value, description
+   - spending_id, employee_id, spending_date, value
 
 ## Role & Permissions
 
