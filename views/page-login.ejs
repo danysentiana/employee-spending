@@ -1,128 +1,167 @@
-<%- include ('page-header-layout.ejs') %>
-
-<style>
-    .swal2-container {
-        z-index: 10000 !important; 
-        overflow-y: hidden;
-    }
-
-    .swal2-popup {
-        border-radius: 10px; /* Keeps the alert box styled properly */
-    }
-
-    .login-logo {
-        max-height: 130px;
-        width: auto;
-    }
-
-    #login_button:hover {
-        background-color: #295F99 !important;
-        
-    }
-
-    /* Fix for full viewport height without scrolling */
-    html, body {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    .container-fluid.h-100 {
-        height: 100vh !important;
-        overflow: hidden;
-    }
-
-    .row.h-100 {
-        height: 100vh !important;
-        overflow: hidden;
-    }
-
-    /* Ensure right side image fits within viewport */
-    .login-image-container {
-        height: 100vh !important;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .login-image {
-        max-width: 90%;
-        max-height: 100vh;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-    }
-
-    @media (max-width: 767px) {
-        .login-logo {
-            max-height: 90px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Employee Spending Report APP</title>
+    <link href="/assets/css/app-creative.css" rel="stylesheet" type="text/css">
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+            background: #295F99;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Nunito', sans-serif;
         }
-    }
 
-    @media (max-height: 800px) {
-        .login-image {
-            max-height: 90vh;
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
         }
-    }
 
-</style>
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #295F99;
+        }
 
-<div class="container-fluid h-100">
-    <div class="row h-100">
-        <!-- Left Side (Form) -->
-        <div class="col-12 col-md-5 d-flex justify-content-center align-items-center min-vh-100">
-            <div class="login-card w-100 justify-content-center">
-                <form action="/login" method="post" id="form_login" class="text-center text-md-start">
-                    <div class="mb-4 justify-content-center align-items-center d-flex">
-                        <img src="/assets/images/login/logo.png" class="login-logo img-fluid" alt="PPNI Logo">
-                    </div>
-                    <div class="mb-3 px-3 px-md-5">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="ri-mail-line"></i></span>
-                            <input class="form-control" type="text" id="login_username" name="login_username" required placeholder="Email">
-                        </div>
-                    </div>
+        .login-title h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
 
-                    <div class="mb-3 px-3 px-md-5">
-                        <div class="input-group input-group-merge">
-                            <div class="input-group-text" data-password="false">
-                                <span class="password-eye"></span>
-                            </div>
-                            <input type="password" id="login_password" name="login_password" class="form-control" placeholder="Password">
-                        </div>
-                    </div>
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-                    <div class="mb-3 text-center w-100 px-3 px-md-5">
-                        <button id="login_button" class="border-0 w-100 py-2 teal text-white" type="submit" style="border-radius: 11px;"> 
-                            <strong>Sign In</strong>  
-                        </button>
-                    </div>
-                </form>
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #295F99;
+            box-shadow: 0 0 0 3px rgba(41, 95, 153, 0.1);
+        }
+
+        .btn-login {
+            background: #295F99;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #1e4a7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(41, 95, 153, 0.3);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        .input-group-text:hover {
+            background: #e9ecef;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: #295F99;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-title">
+            <h1>Employee Spending Report APP</h1>
+        </div>
+        <form action="/login" method="post" id="form_login">
+            <div class="form-group">
+                <label for="login_username">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="ri-user-line"></i></span>
+                    <input type="text" class="form-control" id="login_username" name="login_username" required placeholder="Masukkan username">
+                </div>
             </div>
-        </div>
 
-        <!-- Right Side (Image: hidden on mobile) -->
-        <div class="col-7 d-none d-md-flex login-image-container p-0">
-            <img src="/assets/images/login/container.png" alt="" class="login-image">
-        </div>
+            <div class="form-group">
+                <label for="login_password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-control" id="login_password" name="login_password" required placeholder="Masukkan password">
+                    <span class="password-toggle" onclick="showPassword()">
+                        <i class="ri-eye-line" id="password_icon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" id="login_button" class="btn-login">
+                    <i class="ri-login-box-line me-2"></i> Login
+                </button>
+            </div>
+        </form>
     </div>
-</div>
 
-<!-- <div class="row">
-</div> -->
-<!-- end page -->
+    <!-- Vendor js -->
+    <script src="/assets/js/vendor.min.js"></script>
 
-<!-- Vendor js -->
-<script src="/assets/js/vendor.min.js"></script>
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- App js -->
-<script src="/assets/js/app.min.js"></script>
-
-<!-- Sweetalert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Internal -->
-<script type="text/javascript" src="/script/script-login.js"></script>
+    <!-- Internal -->
+    <script type="text/javascript" src="/script/script-login.js"></script>
 </body>
-
 </html>
