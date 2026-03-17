@@ -10,11 +10,9 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 text-md-end mt-3 mt-md-0">
-                <a href="/employee/add">
-                    <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">
-                        <i class="mdi mdi-plus me-1"></i> Tambah Karyawan
-                    </button>
-                </a>
+                <button type="button" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                    <i class="mdi mdi-plus me-1"></i> Tambah Karyawan
+                </button>
             </div>
         </div>
 
@@ -57,7 +55,6 @@
                                         <th style="color: white;">ID Karyawan</th>
                                         <th style="color: white;">Nama Karyawan</th>
                                         <th style="color: white;">Departemen</th>
-                                        <th style="color: white;">Tanggal Dibuat</th>
                                         <th style="color: white;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -66,6 +63,68 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for adding employee -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addEmployeeModalLabel">Tambah Karyawan</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-employee-form">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="employee-name" class="form-label">Nama Karyawan</label>
+                            <input type="text" class="form-control" id="employee-name" name="employee_name" placeholder="Masukkan nama karyawan" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="department-select" class="form-label">Departemen</label>
+                            <select class="form-select" id="department-select" name="department_id" required>
+                                <option value="">Pilih Departemen</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" form="add-employee-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create modal for editing employee -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEmployeeModalLabel">Edit Karyawan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-employee-form">
+                    <div class="mb-3">
+                        <label for="edit-employee-name" class="form-label">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="edit-employee-name" name="employee_name" placeholder="Masukkan nama karyawan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-department-select" class="form-label">Departemen</label>
+                        <select class="form-select" id="edit-department-select" name="department_id" required>
+                            <option value="">Pilih Departemen</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" form="edit-employee-form" class="btn btn-primary" style="background-color: #295F99; border-color: #295F99;">Simpan</button>
             </div>
         </div>
     </div>

@@ -31,9 +31,6 @@ const setEmployeeTable = async (start, length, draw, order, filter, decoded) => 
             case 3:
                 query = query.orderBy("d.department_name", orderDir);
                 break;
-            case 4:
-                query = query.orderBy("e.created_at", orderDir);
-                break;
             default:
                 query = query.orderBy("e.employee_id", orderDir);
                 break;
@@ -46,8 +43,7 @@ const setEmployeeTable = async (start, length, draw, order, filter, decoded) => 
                 no: index + 1 + start,
                 employee_id: row.employee_id,
                 employee_name: row.employee_name,
-                department_name: row.department_name,
-                created_at: row.created_at
+                department_name: row.department_name
             };
         });
         return {
@@ -81,8 +77,7 @@ const createEmployee = async (data, user) => {
 
         const [newEmployeeId] = await db("Employees").insert({
             employee_name: data.employee_name,
-            department_id: data.department_id,
-            created_at: new Date()
+            department_id: data.department_id
         }).returning("employee_id");
 
         return {
@@ -139,8 +134,7 @@ const updateEmployee = async (id, data, user) => {
 
         await db("Employees").where("employee_id", id).update({
             employee_name: data.employee_name,
-            department_id: data.department_id,
-            updated_at: new Date()
+            department_id: data.department_id
         });
 
         return {

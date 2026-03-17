@@ -141,4 +141,20 @@ router.get('/all', async (req, res) => {
     }
 });
 
+router.get('/detail/:id', async (req, res) => {
+    const employeeId = req.params.id;
+    try {
+        const result = await backend.getEmployeeById(employeeId);
+        if (result.status !== 'ok') {
+            return res.status(404).json(result);
+        }
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({
+            status: "nok",
+            message: "Terjadi kesalahan server"
+        });
+    }
+});
+
 export default router;
